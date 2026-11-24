@@ -1,11 +1,29 @@
-def analyze_risk(text: str) -> dict:
-    normalized_text = text.lower()
+import re
+import unicodedata
 
-    if (
-        "login" in normalized_text
-        or "pago" in normalized_text
-        or "api" in normalized_text
-    ):
+
+def _normalize(text: str) -> str:
+    text = unicodedata.normalize("NFD", text.lower())
+    return "".join(c for c in text if unicodedata.category(c) != "Mn")
+
+
+def _has_any(text: str, patterns: list) -> bool:
+    return any(re.search(p, text) for p in patterns)
+
+
+HIGH_PATTERNS = [r"\blogin\b", r"\bpagos?\b", r"\bpayments?\b", r"\bapis?\b"]
+MEDIUM_PATTERNS = [
+    r"\bformularios?\b",
+    r"\bforms?\b",
+    r"\bvalidacion(es)?\b",
+    r"\bvalidations?\b",
+]
+
+
+def analyze_risk(text: str) -> dict:
+    normalized_text = _normalize(text)
+
+    if _has_any(normalized_text, HIGH_PATTERNS):
         return {
             "risk": "alto",
             "explanation": "The functionality includes critical flows such as authentication, payments, or backend integrations.",
@@ -16,11 +34,7 @@ def analyze_risk(text: str) -> dict:
             ]
         }
 
-    if (
-        "formulario" in normalized_text
-        or "validación" in normalized_text
-        or "validacion" in normalized_text
-    ):
+    if _has_any(normalized_text, MEDIUM_PATTERNS):
         return {
             "risk": "medio",
             "explanation": "The functionality includes validations or user input flows with moderate impact.",

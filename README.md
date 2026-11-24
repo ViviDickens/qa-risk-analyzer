@@ -5,8 +5,8 @@ Rule-based risk assessment engine for quality assurance workflows. Analyzes feat
 - Three-tier risk classification: High, Medium, Low
 - Keyword-driven analysis: Pattern matching against security-critical flows (authentication, payments, integrations) and data validation
 - Automated test recommendations: Contextual suggestions based on identified risk level
-- FastAPI backend: RESTful API with async support
-- Comprehensive test suite: 3 pytest tests covering risk classification
+- FastAPI backend: RESTful API
+- Test suite: 8 pytest tests covering risk classification, edge cases and validation
 
 ## Installation
 

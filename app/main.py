@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from app.service import analyze_risk
 
 app = FastAPI()
 
 
 class RiskRequest(BaseModel):
-    summary: str
+    summary: str = Field(..., min_length=1)
 
 
 @app.get("/")
